@@ -1,0 +1,15 @@
+{
+  "name": "api-platform-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "B2D REST API SaaS Platform - Monorepo (Vue 3 + Golang Fiber)",
+  "scripts": {
+    "dev": "concurrently -k -p \"[{name}]\" -n \"BACKEND,FRONTEND\" -c \"cyan.bold,emerald.bold\" \"cd backend && air\" \"cd frontend && npm run dev\"",
+    "dev:backend": "cd backend && air",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "cd backend && go mod download && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -1,0 +1,29 @@
+# Node / Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Go compiled binaries and temporary folders
+backend/tmp/
+tmp/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+backend/build-errors.log
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
