@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"api-platform/config"
+	"api-platform/routes"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -52,6 +53,9 @@ func main() {
 			"database": "connected",
 		})
 	})
+
+	// Setup Authentication Routes (/api/auth)
+	routes.SetupAuthRoutes(api)
 
 	log.Printf("Starting Core API Server on port :%s...\n", port)
 	log.Fatal(app.Listen(":" + port))
