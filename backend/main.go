@@ -69,6 +69,9 @@ func main() {
 	// Setup Public Developer API Routes (/api/v1) with API Key validation, Rate Limiting, and Audit Logging
 	routes.SetupPublicAPIRoutes(api)
 
+	// Setup Audit Logs Query Routes (/api/logs)
+	routes.SetupAuditLogRoutes(api)
+
 	log.Printf("Starting Core API Server on port :%s...\n", port)
 	log.Fatal(app.Listen(":" + port))
 }
