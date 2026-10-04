@@ -57,6 +57,9 @@ func main() {
 	// Setup Authentication Routes (/api/auth)
 	routes.SetupAuthRoutes(api)
 
+	// Setup API Key Lifecycle Routes (/api/keys)
+	routes.SetupAPIKeyRoutes(api)
+
 	log.Printf("Starting Core API Server on port :%s...\n", port)
 	log.Fatal(app.Listen(":" + port))
 }
