@@ -26,6 +26,12 @@ func main() {
 	}
 	defer config.DisconnectDB()
 
+	// Initialize Redis connection for rate limiting (with in-memory fallback if unavailable)
+	if _, err := config.ConnectRedis(); err != nil {
+		log.Printf("Notice: Redis initialization (%v). Sliding-window rate limiter will operate with in-memory fallback.\n", err)
+	}
+	defer config.CloseRedis()
+
 	// Resolve server port
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -59,6 +65,9 @@ func main() {
 
 	// Setup API Key Lifecycle Routes (/api/keys)
 	routes.SetupAPIKeyRoutes(api)
+
+	// Setup Public Developer API Routes (/api/v1) with API Key validation, Rate Limiting, and Audit Logging
+	routes.SetupPublicAPIRoutes(api)
 
 	log.Printf("Starting Core API Server on port :%s...\n", port)
 	log.Fatal(app.Listen(":" + port))
