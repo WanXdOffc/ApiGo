@@ -2,14 +2,35 @@ package main
 
 import (
 	"log"
+	"os"
+
+	"api-platform/config"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Load environment variables from .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("Notice: .env file not found, using system environment variables")
+	}
+
+	// Initialize MongoDB connection before starting server
+	if _, err := config.ConnectDB(); err != nil {
+		log.Fatalf("Database connection initialization failed: %v", err)
+	}
+	defer config.DisconnectDB()
+
+	// Resolve server port
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	app := fiber.New(fiber.Config{
 		AppName: "B2D API Platform SaaS - Core API",
 	})
@@ -27,10 +48,11 @@ func main() {
 	api := app.Group("/api")
 	api.Get("/health", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-			"status": "ok",
+			"status":   "ok",
+			"database": "connected",
 		})
 	})
 
-	log.Println("Starting Core API Server on port :8080...")
-	log.Fatal(app.Listen(":8080"))
+	log.Printf("Starting Core API Server on port :%s...\n", port)
+	log.Fatal(app.Listen(":" + port))
 }
